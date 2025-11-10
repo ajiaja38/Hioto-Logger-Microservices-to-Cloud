@@ -85,13 +85,7 @@ func CloseRabbitMQ() {
 }
 
 func CreateRmqInstance() {
-	// Init RabbitMQ Cloud
 	if err := initializeRabbitMQ(os.Getenv("RMQ_HIOTO_CLOUD_URL"), os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE")); err != nil {
-		log.Fatal(err)
-	}
-
-	// Init RabbitMQ Local
-	if err := initializeRabbitMQ(os.Getenv("RMQ_HIOTO_LOCAL_URL"), os.Getenv("RMQ_HIOTO_LOCAL_INSTANCE")); err != nil {
 		log.Fatal(err)
 	}
 }
