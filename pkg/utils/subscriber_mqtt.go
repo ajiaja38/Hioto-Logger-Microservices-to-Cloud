@@ -8,6 +8,8 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
+type MessageHandler func([]byte)
+
 func ConsumeMQTTTopic(ctx context.Context, instanceName, topic string, handlerFunc MessageHandler) {
 	client, err := config.GetMqttInstance(instanceName)
 
