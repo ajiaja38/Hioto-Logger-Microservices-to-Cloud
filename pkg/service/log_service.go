@@ -3,8 +3,8 @@ package service
 import (
 	"encoding/json"
 	"go/hioto-logger/pkg/dto"
-	"go/hioto-logger/pkg/handler"
 	"go/hioto-logger/pkg/model"
+	"go/hioto-logger/pkg/utils"
 	"log"
 	"os"
 
@@ -70,7 +70,7 @@ func (s *LogService) GetAllLogs() {
 		return
 	}
 
-	handler.PublishToRmq(body, os.Getenv("LOGS_QUEUE"), "amq.direct")
+	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("LOGS_QUEUE"), "amq.direct")
 
 	queryDeleteAll := s.db.Exec("DELETE FROM logs")
 
@@ -118,7 +118,7 @@ func (s *LogService) GetAllLogAktuators() {
 		return
 	}
 
-	handler.PublishToRmq(body, os.Getenv("LOGS_AKTUATOR_QUEUE"), "amq.direct")
+	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("LOGS_AKTUATOR_QUEUE"), "amq.direct")
 
 	queryDeleteAll := s.db.Exec("DELETE FROM log_aktuators")
 
@@ -168,7 +168,7 @@ func (s *LogService) GetAllMonitoringHistory() {
 		return
 	}
 
-	handler.PublishToRmq(body, os.Getenv("MONITORING_RESPONSE_QUEUE"), "amq.direct")
+	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("MONITORING_RESPONSE_QUEUE"), "amq.direct")
 
 	queryDeleteAll := s.db.Exec("DELETE FROM monitoring_histories")
 

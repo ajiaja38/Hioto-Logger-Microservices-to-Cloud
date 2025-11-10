@@ -1,14 +1,22 @@
-package handler
+package utils
 
 import (
 	"go/hioto-logger/config"
 	"log"
+	"os"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func PublishToRmq(message []byte, queueName string, exchange string) {
-	ch := config.RmqChannel
+func PublishToRmq(rmqInstance string, message []byte, queueName string, exchange string) {
+	instance, err := config.GetRMQInstance(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"))
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	ch := instance.Channel
 
 	q, err := ch.QueueDeclare(
 		queueName,
