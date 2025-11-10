@@ -33,6 +33,9 @@ func main() {
 	config.CreateRmqInstance()
 	defer config.CloseRabbitMQ()
 
+	config.CreateMqttInstance()
+	defer config.CloseAllMqttInstances()
+
 	// service
 	logService := service.NewLogService(db)
 	deviceService := service.NewDeviceService(db)

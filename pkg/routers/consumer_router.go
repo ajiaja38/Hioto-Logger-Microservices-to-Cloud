@@ -20,5 +20,9 @@ func NewConsumerMessageBroker(consumerHandler *handler.ConsumerHandler, ctx cont
 }
 
 func (r *ConsumerMessageBroker) StartConsume() {
-	go utils.ConsumeRmq(r.ctx, os.Getenv("RMQ_HIOTO_LOCAL_INSTANCE"), os.Getenv("STATUS_DEVICE_QUEUE"), r.consumerHandler.ChangeStatusDevice)
+	go utils.ConsumeMQTTTopic(
+		r.ctx,
+		os.Getenv("MQTT_LOCAL_INSTANCE_NAME"),
+		os.Getenv("STATUS_DEVICE_TOPIC"),
+		r.consumerHandler.ChangeStatusDevice)
 }

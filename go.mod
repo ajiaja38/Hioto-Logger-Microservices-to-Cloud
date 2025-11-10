@@ -10,7 +10,14 @@ require (
 )
 
 require (
+	github.com/gorilla/websocket v1.5.3 // indirect
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/sync v0.17.0 // indirect
+)
+
+require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/eclipse/paho.mqtt.golang v1.5.1
 	github.com/glebarez/go-sqlite v1.21.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
