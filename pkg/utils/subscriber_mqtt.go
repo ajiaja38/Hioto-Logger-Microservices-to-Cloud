@@ -32,7 +32,7 @@ func ConsumeMQTTTopic(ctx context.Context, instanceName, topic string, handlerFu
 
 	<-ctx.Done()
 
-	log.Printf("MQTT context done, cleaning up...")
+	log.Printf("💧MQTT context done, cleaning up...")
 	client.Unsubscribe(topic)
 	client.Disconnect(250)
 }

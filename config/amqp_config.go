@@ -74,7 +74,7 @@ func CloseRabbitMQ() {
 	for name, rmqInstance := range rmqInstances {
 		if rmqInstance.Channel != nil {
 			rmqInstance.Channel.Close()
-			log.Printf("🔒 RabbitMQ %s channel closed \n", name)
+			log.Printf("🔒 RabbitMQ %s channel closed", name)
 		}
 
 		if rmqInstance.Conn != nil {
