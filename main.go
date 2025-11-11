@@ -55,5 +55,6 @@ func main() {
 		logService.GetAllLogs,
 		logService.GetAllLogAktuators,
 		logService.GetAllMonitoringHistory,
+		deviceService.CheckInactiveDevice,
 	)
 }

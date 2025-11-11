@@ -79,3 +79,13 @@ func (s *DeviceService) UpdateStatusDevice(guid string, status string) {
 
 	log.Printf("Status device successfully updated: %s ✅", status)
 }
+
+func (s *DeviceService) CheckInactiveDevice() {
+	treshold := time.Now().Add(-10 * time.Second)
+
+	if err := s.db.Model(&model.Registration{}).Where("last_seen < ?", treshold).Update("status_device", enum.OFF).Error; err != nil {
+		log.Printf("Error checking for inactive device: %v 💥", err)
+	}
+
+	log.Printf("Inactive devices marked as offline 🔻")
+}
