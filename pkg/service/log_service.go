@@ -26,20 +26,18 @@ func (s *LogService) GetAllLogs() {
 
 	var logs []model.Log
 
-	query := s.db.Raw(`
-			SELECT
-				id, 
-				input_guid, 
-				input_name, 
-				input_value, 
-				output_guid, 
-				output_value, 
-				time 
-			FROM logs
-	`).Scan(&logs)
-
-	if query.Error != nil {
-		log.Printf("Failed to get logs: %v", query.Error)
+	if err := s.db.Raw(`
+        SELECT
+            id, 
+            input_guid, 
+            input_name, 
+            input_value, 
+            output_guid, 
+            output_value, 
+            time 
+        FROM logs
+	`).Scan(&logs).Error; err != nil {
+		log.Printf("Failed to get logs: %v", err)
 		return
 	}
 
@@ -84,12 +82,8 @@ func (s *LogService) GetAllLogAktuators() {
 
 	var logs []model.LogAktuator
 
-	query := s.db.Raw(`
-			SELECT * FROM log_aktuators
-	`).Scan(&logs)
-
-	if query.Error != nil {
-		log.Printf("Failed to get logs: %v", query.Error)
+	if err := s.db.Raw(`SELECT * FROM log_aktuators`).Scan(&logs).Error; err != nil {
+		log.Printf("Failed to get logs: %v", err)
 		return
 	}
 
@@ -133,12 +127,8 @@ func (s *LogService) GetAllMonitoringHistory() {
 
 	var logs []model.MonitoringHistory
 
-	query := s.db.Raw(`
-		SELECT * FROM monitoring_histories
-	`).Scan(&logs)
-
-	if query.Error != nil {
-		log.Printf("Failed to get monitoring history: %v", query.Error)
+	if err := s.db.Raw(`SELECT * FROM monitoring_histories`).Scan(&logs).Error; err != nil {
+		log.Printf("Failed to get monitoring history: %v", err)
 		return
 	}
 
@@ -170,10 +160,8 @@ func (s *LogService) GetAllMonitoringHistory() {
 
 	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("MONITORING_RESPONSE_QUEUE"), "amq.direct")
 
-	queryDeleteAll := s.db.Exec("DELETE FROM monitoring_histories")
-
-	if queryDeleteAll.Error != nil {
-		log.Printf("Failed to delete monitoring history: %v", queryDeleteAll.Error)
+	if err := s.db.Exec("DELETE FROM monitoring_histories").Error; err != nil {
+		log.Printf("Failed to delete monitoring history: %v", err)
 		return
 	}
 }

@@ -32,9 +32,7 @@ func NewDeviceService(db *gorm.DB) *DeviceService {
 func (s *DeviceService) UpdateStatusDevice(guid string, status string) {
 	var device model.Registration
 
-	err := s.db.First(&device, "guid = ?", guid).Error
-
-	if err != nil {
+	if err := s.db.First(&device, "guid = ?", guid).Error; err != nil {
 		log.Printf("Device not found: %v 💥", err)
 		return
 	}
@@ -42,9 +40,7 @@ func (s *DeviceService) UpdateStatusDevice(guid string, status string) {
 	device.StatusDevice = enum.EDeviceStatus(status)
 	device.LastSeen = time.Now().In(location)
 
-	err = s.db.Save(&device).Error
-
-	if err != nil {
+	if err := s.db.Save(&device).Error; err != nil {
 		log.Printf("Error updating status device: %v 💥", err)
 		return
 	}
