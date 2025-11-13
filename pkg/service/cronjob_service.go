@@ -35,6 +35,7 @@ func CronJobService(timeTicker *time.Ticker, callbacks ...func()) {
 				mu.Unlock()
 				continue
 			}
+
 			running = true
 			mu.Unlock()
 

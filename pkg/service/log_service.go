@@ -110,7 +110,12 @@ func (s *LogService) GetAllLogAktuators() {
 		return
 	}
 
-	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_LOGS_AKTUATOR_QUEUE.GetValue(), "amq.direct")
+	utils.PublishToRmq(
+		config.RMQ_CLOUD_INSTANCE.GetValue(),
+		body,
+		config.RMQ_LOGS_AKTUATOR_QUEUE.GetValue(),
+		"amq.direct",
+	)
 
 	if err := s.db.Exec("DELETE FROM log_aktuators").Error; err != nil {
 		log.Printf("Failed to delete logs: %v", err)
