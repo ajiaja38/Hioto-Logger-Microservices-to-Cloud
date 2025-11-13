@@ -2,11 +2,11 @@ package service
 
 import (
 	"encoding/json"
+	"go/hioto-logger/config"
 	"go/hioto-logger/pkg/dto"
 	"go/hioto-logger/pkg/model"
 	"go/hioto-logger/pkg/utils"
 	"log"
-	"os"
 
 	"gorm.io/gorm"
 )
@@ -57,7 +57,7 @@ func (s *LogService) GetAllLogs() {
 			OutputGuid:  log.OutputGuid,
 			OutputValue: log.OutputValue,
 			Time:        log.Time,
-			MacServer:   os.Getenv("MAC_ADDRESS"),
+			MacServer:   config.MAC_ADDRESS.GetValue(),
 		})
 	}
 
@@ -68,12 +68,10 @@ func (s *LogService) GetAllLogs() {
 		return
 	}
 
-	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("LOGS_QUEUE"), "amq.direct")
+	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_LOGS_AKTUATOR_QUEUE.GetValue(), "amq.direct")
 
-	queryDeleteAll := s.db.Exec("DELETE FROM logs")
-
-	if queryDeleteAll.Error != nil {
-		log.Printf("Failed to delete logs: %v", queryDeleteAll.Error)
+	if err := s.db.Exec("DELETE FROM logs").Error; err != nil {
+		log.Printf("Failed to delete logs: %v", err)
 	}
 }
 
@@ -101,7 +99,7 @@ func (s *LogService) GetAllLogAktuators() {
 			Name:      log.Name,
 			Value:     log.Value,
 			Time:      log.Time,
-			MacServer: os.Getenv("MAC_ADDRESS"),
+			MacServer: config.MAC_ADDRESS.GetValue(),
 		})
 	}
 
@@ -112,12 +110,10 @@ func (s *LogService) GetAllLogAktuators() {
 		return
 	}
 
-	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("LOGS_AKTUATOR_QUEUE"), "amq.direct")
+	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_LOGS_AKTUATOR_QUEUE.GetValue(), "amq.direct")
 
-	queryDeleteAll := s.db.Exec("DELETE FROM log_aktuators")
-
-	if queryDeleteAll.Error != nil {
-		log.Printf("Failed to delete logs: %v", queryDeleteAll.Error)
+	if err := s.db.Exec("DELETE FROM log_aktuators").Error; err != nil {
+		log.Printf("Failed to delete logs: %v", err)
 		return
 	}
 }
@@ -147,7 +143,7 @@ func (s *LogService) GetAllMonitoringHistory() {
 			DeviceType: log.DeviceType,
 			Value:      log.Value,
 			Time:       log.Time,
-			MacServer:  os.Getenv("MAC_ADDRESS"),
+			MacServer:  config.MAC_ADDRESS.GetValue(),
 		})
 	}
 
@@ -158,7 +154,7 @@ func (s *LogService) GetAllMonitoringHistory() {
 		return
 	}
 
-	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), body, os.Getenv("MONITORING_RESPONSE_QUEUE"), "amq.direct")
+	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_QUEUE_MONITORING_RESPONSE.GetValue(), "amq.direct")
 
 	if err := s.db.Exec("DELETE FROM monitoring_histories").Error; err != nil {
 		log.Printf("Failed to delete monitoring history: %v", err)

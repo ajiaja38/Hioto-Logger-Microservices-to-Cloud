@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"go/hioto-logger/config"
 	"go/hioto-logger/pkg/handler"
 	"go/hioto-logger/pkg/routers"
@@ -11,19 +12,13 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/joho/godotenv"
 )
 
-func init() {
-	err := godotenv.Load()
-
-	if err != nil {
-		log.Print("Error loading .env file")
-	}
-}
-
 func main() {
+	if err := config.LoadEnv(); err != nil {
+		fmt.Println(err)
+	}
+
 	db, err := config.DBConnection()
 
 	if err != nil {

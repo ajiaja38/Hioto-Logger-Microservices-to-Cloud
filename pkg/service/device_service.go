@@ -2,12 +2,12 @@ package service
 
 import (
 	"encoding/json"
+	"go/hioto-logger/config"
 	"go/hioto-logger/pkg/dto"
 	"go/hioto-logger/pkg/enum"
 	"go/hioto-logger/pkg/model"
 	"go/hioto-logger/pkg/utils"
 	"log"
-	"os"
 	"time"
 
 	"gorm.io/gorm"
@@ -61,7 +61,7 @@ func (s *DeviceService) UpdateStatusDevice(guid string, status string) {
 			CreatedAt:    device.CreatedAt,
 			UpdatedAt:    device.UpdatedAt,
 		},
-		MacServer: os.Getenv("MAC_ADDRESS"),
+		MacServer: config.MAC_ADDRESS.GetValue(),
 	}
 
 	jsonBody, err := json.Marshal(bodyToCloud)
@@ -71,7 +71,7 @@ func (s *DeviceService) UpdateStatusDevice(guid string, status string) {
 		return
 	}
 
-	utils.PublishToRmq(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"), jsonBody, os.Getenv("UPDATE_RES_CLOUD"), "amq.direct")
+	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), jsonBody, config.RMQ_QUEUE_UPDATE_RESPONSE.GetValue(), "amq.direct")
 
 	log.Printf("Status device successfully updated: %s ✅", status)
 }

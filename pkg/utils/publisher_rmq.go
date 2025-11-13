@@ -3,13 +3,12 @@ package utils
 import (
 	"go/hioto-logger/config"
 	"log"
-	"os"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 func PublishToRmq(rmqInstance string, message []byte, queueName string, exchange string) {
-	instance, err := config.GetRMQInstance(os.Getenv("RMQ_HIOTO_CLOUD_INSTANCE"))
+	instance, err := config.GetRMQInstance(config.RMQ_CLOUD_INSTANCE.GetValue())
 
 	if err != nil {
 		log.Println(err)

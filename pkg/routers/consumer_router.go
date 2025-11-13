@@ -2,9 +2,9 @@ package routers
 
 import (
 	"context"
+	"go/hioto-logger/config"
 	"go/hioto-logger/pkg/handler"
 	"go/hioto-logger/pkg/utils"
-	"os"
 )
 
 type ConsumerMessageBroker struct {
@@ -22,7 +22,7 @@ func NewConsumerMessageBroker(consumerHandler *handler.ConsumerHandler, ctx cont
 func (r *ConsumerMessageBroker) StartConsume() {
 	go utils.ConsumeMQTTTopic(
 		r.ctx,
-		os.Getenv("MQTT_LOCAL_INSTANCE_NAME"),
-		os.Getenv("STATUS_DEVICE_TOPIC"),
+		config.MQTT_LOCAL_INSTANCE_NAME.GetValue(),
+		config.MQTT_TOPIC_STATUS_DEVICE.GetValue(),
 		r.consumerHandler.ChangeStatusDevice)
 }
