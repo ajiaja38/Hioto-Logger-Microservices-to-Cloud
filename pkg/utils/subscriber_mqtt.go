@@ -28,7 +28,7 @@ func ConsumeMQTTTopic(ctx context.Context, instanceName, topic string, handlerFu
 		return
 	}
 
-	log.Printf("Subscribed to topic: %s", topic)
+	log.Printf("Subscribed to the topic: %s", topic)
 
 	<-ctx.Done()
 
