@@ -68,7 +68,7 @@ func (s *LogService) GetAllLogs() {
 		return
 	}
 
-	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_LOGS_AKTUATOR_QUEUE.GetValue(), "amq.direct")
+	utils.PublishToRmq(config.RMQ_CLOUD_INSTANCE.GetValue(), body, config.RMQ_LOGS_QUEUE.GetValue(), "amq.direct")
 
 	if err := s.db.Exec("DELETE FROM logs").Error; err != nil {
 		log.Printf("Failed to delete logs: %v", err)
