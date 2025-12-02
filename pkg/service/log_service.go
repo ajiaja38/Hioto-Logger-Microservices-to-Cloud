@@ -127,6 +127,7 @@ func (s *LogService) GetAllMonitoringHistory() {
 	log.Print("Getting all monitoring history...")
 
 	var logs []model.MonitoringHistory
+	var payload []dto.LogMonitoringDeviceHistoryResponseDto
 
 	if err := s.db.Raw(`SELECT * FROM monitoring_histories`).Scan(&logs).Error; err != nil {
 		log.Printf("Failed to get monitoring history: %v", err)
@@ -137,8 +138,6 @@ func (s *LogService) GetAllMonitoringHistory() {
 		log.Print("No monitoring history found")
 		return
 	}
-
-	var payload []dto.LogMonitoringDeviceHistoryResponseDto
 
 	for _, log := range logs {
 		payload = append(payload, dto.LogMonitoringDeviceHistoryResponseDto{
