@@ -33,7 +33,7 @@ func PublishToRmq(rmqInstance string, message []byte, queueName string, exchange
 		return
 	}
 
-	err = ch.Publish(
+	if err = ch.Publish(
 		exchange,
 		q.Name,
 		false,
@@ -41,9 +41,7 @@ func PublishToRmq(rmqInstance string, message []byte, queueName string, exchange
 		amqp.Publishing{
 			Body: message,
 		},
-	)
-
-	if err != nil {
+	); err != nil {
 		log.Printf("Failed to publish data: %v 💥", err)
 		return
 	}
