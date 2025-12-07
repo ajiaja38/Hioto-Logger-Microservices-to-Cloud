@@ -29,7 +29,7 @@ func PublishToRmq(rmqInstance string, message []byte, queueName string, exchange
 	)
 
 	if err != nil {
-		log.Printf("Failed to declare the queue: %v 💥", err)
+		log.Printf("Failed to declare queue: %v 💥", err)
 		return
 	}
 
